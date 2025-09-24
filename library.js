@@ -1,54 +1,73 @@
 // library.js
 
-// ======= Save Generated Image to Library =======
-export function saveToLibrary(imageSrc, userId = 'Anonymous') {
-    if (!imageSrc) {
-        alert("No image to save!");
-        return;
-    }
+// Save to Library
+export function saveToLibrary(imageSrc, userId = 'Anonymous', prompt = 'Untitled') {
+  if (!imageSrc) {
+    alert("⚠️ No image found to save.");
+    return;
+  }
 
-    // Get existing public library from localStorage
-    let publicLibrary = JSON.parse(localStorage.getItem('publicLibrary')) || [];
+  let library = JSON.parse(localStorage.getItem('genartLibrary')) || [];
 
-    // Add new image
-    publicLibrary.push({ image: imageSrc, userId });
+  library.push({
+    image: imageSrc,
+    userId,
+    prompt,
+    timestamp: Date.now()
+  });
 
-    // Save back to localStorage
-    localStorage.setItem('publicLibrary', JSON.stringify(publicLibrary));
-
-    alert("Image saved to public library!");
+  localStorage.setItem('genartLibrary', JSON.stringify(library));
+  alert("✅ Saved to Library!");
 }
 
-// ======= Render Library Images on Page =======
-export function renderLibrary(gridContainerId) {
-    const libraryGrid = document.getElementById(gridContainerId);
-    if (!libraryGrid) return;
+// Render Library (for library.html)
+export function renderLibrary(gridId) {
+  const grid = document.getElementById(gridId);
+  if (!grid) return;
 
-    const libraryImages = JSON.parse(localStorage.getItem('publicLibrary')) || [];
-    libraryGrid.innerHTML = '';
+  let library = JSON.parse(localStorage.getItem('genartLibrary')) || [];
 
-    if (libraryImages.length === 0) {
-        libraryGrid.innerHTML = '<p class="text-center text-gray-500 col-span-full">No images in the library yet.</p>';
-        return;
-    }
+  grid.innerHTML = "";
 
-    libraryImages.forEach(item => {
-        const card = document.createElement('div');
-        card.className = "bg-white rounded-lg shadow p-2";
+  if (library.length === 0) {
+    grid.innerHTML = `<p class="text-gray-500 text-center col-span-full">No saved images yet.</p>`;
+    return;
+  }
 
-        card.innerHTML = `
-            <img src="${item.image}" alt="Shared AI Image" class="w-full h-48 object-cover rounded mb-2">
-            <p class="text-sm text-gray-600 truncate">User ID: ${item.userId}</p>
-        `;
+  library.forEach((item, index) => {
+    const card = document.createElement("div");
+    card.className = "bg-white shadow rounded-lg overflow-hidden border hover:shadow-lg transition";
 
-        libraryGrid.appendChild(card);
-    });
+    card.innerHTML = `
+      <img src="${item.image}" alt="AI Art" class="w-full h-48 object-cover">
+      <div class="p-3">
+        <p class="text-sm text-gray-700 truncate">"${item.prompt}"</p>
+        <p class="text-xs text-gray-500">By ${item.userId}</p>
+        <div class="flex justify-between mt-2">
+          <button class="text-blue-500 hover:underline text-sm" onclick="copyPrompt(${index})">📋 Copy</button>
+          <button class="text-red-500 hover:underline text-sm" onclick="deleteItem(${index})">🗑 Delete</button>
+        </div>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
 }
 
-// ======= Optional: Clear Library =======
-export function clearLibrary() {
-    if (confirm("Are you sure you want to clear the public library?")) {
-        localStorage.removeItem('publicLibrary');
-        location.reload();
-    }
-}
+// Copy prompt
+window.copyPrompt = (index) => {
+  let library = JSON.parse(localStorage.getItem('genartLibrary')) || [];
+  navigator.clipboard.writeText(library[index].prompt).then(() => {
+    alert("✅ Prompt copied!");
+  });
+};
+
+// Delete an item
+window.deleteItem = (index) => {
+  let library = JSON.parse(localStorage.getItem('genartLibrary')) || [];
+  if (confirm("Delete this item?")) {
+    library.splice(index, 1);
+    localStorage.setItem('genartLibrary', JSON.stringify(library));
+    location.reload();
+  }
+};
