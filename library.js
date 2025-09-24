@@ -80,7 +80,7 @@ export async function renderLibrary(gridId, isPrivate = false) {
         grid.innerHTML = `<p class="text-gray-500 text-center col-span-full">⚠️ Please sign in to view your Library.</p>`;
         return;
       }
-      q = query(collection(db, "library"), where("userId", "==", user.uid"), orderBy("createdAt", "desc"));
+      q = query(collection(db, "library"), where("userId", "==", user.uid), orderBy("createdAt", "desc"));
     } else {
       // Public: show all users’ creations
       q = query(collection(db, "library"), orderBy("createdAt", "desc"));
@@ -142,3 +142,4 @@ window.deleteItem = async (docId, storagePath) => {
     alert("❌ Failed to delete.");
   }
 };
+
