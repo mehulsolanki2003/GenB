@@ -101,19 +101,23 @@ function startTimer() {
     }, 50); // Update every 50ms for a smooth countdown
 }
 
-const saveLibraryBtn = document.getElementById('save-to-library-btn');
-    if (saveLibraryBtn) {
-        saveLibraryBtn.addEventListener('click', () => {
-            const generatedImage = document.querySelector('#image-grid img')?.src;
-            const userId = auth.currentUser?.uid || 'Anonymous';
-            saveToLibrary(generatedImage, userId);
-        });
-    }
+// Save button inside preview modal
+const saveBtn = document.getElementById("save-to-library-btn");
+if (saveBtn) {
+  saveBtn.addEventListener("click", () => {
+    const image = document.getElementById("preview-image")?.src;
+    const prompt = document.getElementById("preview-prompt-input")?.value || "Untitled";
+    const userId = auth?.currentUser?.uid || "Anonymous";
+
+    saveToLibrary(image, userId, prompt);
+  });
+}
 
 // --- Image Handling & Uploads ---
 function handleImageUpload(event) {
     const file = event.target.files[0];
 // ... existing code ... -->
+
 
 
 
