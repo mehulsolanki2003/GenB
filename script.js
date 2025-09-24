@@ -107,9 +107,14 @@ if (saveBtn) {
   saveBtn.addEventListener("click", () => {
     const image = document.getElementById("preview-image")?.src;
     const prompt = document.getElementById("preview-prompt-input")?.value || "Untitled";
-    const userId = auth?.currentUser?.uid || "Anonymous";
+    const user = auth?.currentUser;
 
-    saveToLibrary(image, userId, prompt);
+    if (!user) {
+      alert("⚠️ Please sign in first!");
+      return;
+    }
+
+    saveToLibrary(image, user.uid, prompt, user.displayName, user.photoURL);
   });
 }
 
@@ -117,6 +122,7 @@ if (saveBtn) {
 function handleImageUpload(event) {
     const file = event.target.files[0];
 // ... existing code ... -->
+
 
 
 
