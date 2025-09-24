@@ -1,6 +1,5 @@
 /* --- Base Styles --- */
 body {
-    background-color: #f8fafc; /* This is the fallback color */
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     color: #374151; /* gray-700 */
 }
@@ -88,69 +87,102 @@ body {
 .animate-shake { animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both; }
 
 
-/* --- Interactive Use Case Section --- */
+/* --- Aesthetic Use Case Section --- */
+.use-case-container {
+    background-color: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4rem; /* Equivalent to rounded-[4rem] */
+    padding: 4rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+}
+
 .use-case-tab {
-    font-size: 1.125rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
     font-weight: 600;
-    color: #64748b;
+    color: #475569;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 9999px;
     cursor: pointer;
-    position: relative;
-    padding-bottom: 0.5rem;
-    transition: color 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.use-case-tab::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 0;
-    height: 2px;
-    background-color: #517CBE;
-    transition: width 0.3s ease;
-}
-
-.use-case-tab.active,
 .use-case-tab:hover {
-    color: #334155;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-color: rgba(255, 255, 255, 0.8);
 }
 
 .use-case-tab.active {
-    color: #517CBE;
-    text-shadow: 0 0 15px rgba(81, 124, 190, 0.5);
+    color: #f8fafc;
+    background-color: #517CBE;
+    border-color: #517CBE;
+    box-shadow: 0 4px 14px 0 rgba(81, 124, 190, 0.3);
 }
 
-.use-case-tab.active::after {
-    width: 100%;
+#use-case-descriptions {
+    position: relative;
+    min-height: 80px; /* Adjust as needed */
 }
-
-#use-case-image-container {
-    background-color: #e2e8f0;
-}
-
-#use-case-image-display {
-    transition: opacity 0.4s ease-in-out;
-}
-
-#use-case-image-display.fading {
+.use-case-description {
+    position: absolute;
+    inset: 0;
     opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+.use-case-description.active {
+    opacity: 1;
+}
+.use-case-description .word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(10px);
 }
 
+.use-case-image-frame {
+    aspect-ratio: 4 / 3;
+    border-radius: 2rem; /* equivalent to rounded-3xl */
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+}
+
+#use-case-image-wrapper {
+    position: absolute;
+    inset: 0;
+}
+
+.use-case-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1.1);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.use-case-image.active {
+    opacity: 1;
+    transform: scale(1);
+}
 
 /* --- Mobile Responsiveness --- */
 @media (max-width: 767px) {
-    #masonry-gallery { display: block; }
-    .masonry-column { display: block; }
-    .masonry-column:not(:first-child) { display: none; }
-    .masonry-item { margin-bottom: 1rem; }
-
+    #first-screen-content {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+    }
     #hero-headline {
         font-size: 2.5rem;
         line-height: 1.1;
+        text-align: center;
     }
     #hero-subline {
         font-size: 1rem;
+        padding: 0 1rem;
     }
     #stats-section .grid {
         gap: 1.5rem; /* Reduce gap on mobile */
@@ -158,5 +190,21 @@ body {
     #stats-section h3 {
         font-size: 2.25rem; /* text-4xl */
     }
-}
 
+    .use-case-container {
+        padding: 2rem;
+        border-radius: 2rem;
+    }
+
+    .use-case-text-content {
+        text-align: center;
+    }
+    #use-case-tabs {
+        justify-content: center;
+    }
+
+    #masonry-gallery { display: block; }
+    .masonry-column { display: block; }
+    .masonry-column:not(:first-child) { display: none; }
+    .masonry-item { margin-bottom: 1rem; }
+}
